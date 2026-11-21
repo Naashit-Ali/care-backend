@@ -16,6 +16,17 @@ export const env = {
   /** Minutes before `scheduledAt` when a pending dose may be marked taken. */
   takeWindowBeforeMinutes: Number(process.env.TAKE_WINDOW_BEFORE_MINUTES ?? 15),
   pairingCodeTtlMinutes: Number(process.env.PAIRING_CODE_TTL_MINUTES ?? 15),
+  /**
+   * Phase 2 LLM: `auto` (Gemini first, then Anthropic), `google`, or `anthropic`.
+   * Free tier: get a Gemini key at https://aistudio.google.com/apikey
+   */
+  llmProvider: (process.env.LLM_PROVIDER?.trim().toLowerCase() || 'auto') as 'auto' | 'google' | 'anthropic',
+  geminiApiKey: process.env.GEMINI_API_KEY?.trim() ?? '',
+  geminiModel: process.env.GEMINI_MODEL?.trim() || 'gemini-3.8-flash',
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY?.trim() ?? '',
+  anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL?.trim() || undefined,
+  anthropicModel: process.env.ANTHROPIC_MODEL?.trim() || 'claude-3-5-haiku-latest',
+
   corsOrigin(): true | string[] {
     const raw = process.env.CORS_ORIGIN?.trim();
     if (!raw || raw === '*') return true;

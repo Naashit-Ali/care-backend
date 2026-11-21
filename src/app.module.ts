@@ -7,16 +7,18 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { AgentModule } from './agent/agent.module.js';
 import { CaregiversModule } from './caregivers/caregivers.module.js';
 import { AuthModule } from './common/auth.module.js';
 import { DatabaseModule } from './database/database.module.js';
-// import { DemoModule } from './demo/demo.module.js';
+import { DemoModule } from './demo/demo.module.js';
 import { DosesModule } from './doses/doses.module.js';
 import { env } from './env.js';
 import { MedicinesModule } from './medicines/medicines.module.js';
 import { PairingModule } from './pairing/pairing.module.js';
 import { ParentsModule } from './parents/parents.module.js';
 import { RealtimeModule } from './realtime/realtime.module.js';
+
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -42,7 +44,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     ParentsModule,
     MedicinesModule,
     DosesModule,
-    // DemoModule,
+    AgentModule,
+    DemoModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],

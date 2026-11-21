@@ -1,6 +1,7 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model, Types } from 'mongoose';
+import { AgentService } from '../agent/agent.service.js';
 import type { AuthUser } from '../common/auth.service.js';
 import { atTime, dayString, hhmm } from '../common/utils/time.js';
 import { env } from '../env.js';
@@ -16,6 +17,7 @@ export class DosesService {
     @InjectModel(Medicine.name) private medicines: Model<Medicine>,
     @InjectModel(Parent.name) private parents: Model<Parent>,
     private realtime: RealtimeGateway,
+    @Inject(forwardRef(() => AgentService)) private agent: AgentService,
   ) {}
 
   /**
@@ -113,7 +115,7 @@ export class DosesService {
       ...updated,
       parentName: parent?.name ?? '',
     });
-    // PHASE 2 hook: this.agent?.onDoseMissed(updated)
+    void this.agent.onDoseMissed(updated);
     return updated;
   }
 
